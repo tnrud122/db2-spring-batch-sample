@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.batch.mapper.target.TargetAggMapper">
+
+  <update id="upsertYesterdayAgg">
+    MERGE INTO AGG_DAILY AS T
+    USING (
+      SELECT DATE(CREATED_AT) AS BIZ_DATE,
+             COUNT(*) AS TXN_CNT,
+             COALESCE(SUM(AMOUNT), 0) AS AMT_SUM
+      FROM SRC_TXN
+      WHERE DATE(CREATED_AT) = CURRENT DATE - 1 DAY
+      GROUP BY DATE(CREATED_AT)
+    ) AS S
+    ON T.BIZ_DATE = S.BIZ_DATE
+    WHEN MATCHED THEN UPDATE SET
+      T.TXN_CNT = S.TXN_CNT,
+      T.AMT_SUM = S.AMT_SUM,
+      T.AGG_AT = CURRENT TIMESTAMP
+    WHEN NOT MATCHED THEN
+      INSERT (BIZ_DATE, TXN_CNT, AMT_SUM, AGG_AT)
+      VALUES (S.BIZ_DATE, S.TXN_CNT, S.AMT_SUM, CURRENT TIMESTAMP)
+  </update>
+
+</mapper>

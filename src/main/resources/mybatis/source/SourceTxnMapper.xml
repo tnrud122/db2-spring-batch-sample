@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.batch.mapper.source.SourceTxnMapper">
+
+  <!--
+    MyBatisPagingItemReader provides standard paging parameters:
+      _page, _pagesize, _skiprows
+    Use _skiprows and _pagesize to implement DB2 paging. citeturn0search0turn0search3
+  -->
+  <select id="selectPaged" parameterType="map" resultType="com.example.batch.domain.TxnRecord">
+    SELECT
+      ID          AS id,
+      CUSTOMER_NM AS customerNm,
+      AMOUNT      AS amount,
+      CREATED_AT  AS createdAt
+    FROM SRC_TXN
+    WHERE ID &lt;= #{maxId}
+    ORDER BY ID
+    OFFSET #{_skiprows} ROWS
+    FETCH NEXT #{_pagesize} ROWS ONLY
+  </select>
+
+</mapper>

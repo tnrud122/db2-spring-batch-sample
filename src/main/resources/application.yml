@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: db2-spring-batch-sample
+
+  # IMPORTANT:
+  # - Create Spring Batch metadata tables in DB2 first (schema-db2.sql).
+  # - Keep initialize-schema = never in prod.
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+app:
+  schedule:
+    # Every day at 05:00 Asia/Seoul
+    cron: "0 0 5 * * *"
+  chunk:
+    size: 100
+    maxItems: 10000
+  thread:
+    concurrency: 8
+
+datasource:
+  source:
+    url: "jdbc:db2://localhost:50000/SAMPLE"
+    username: "db2inst1"
+    password: "password"
+    driver-class-name: "com.ibm.db2.jcc.DB2Driver"
+  target:
+    url: "jdbc:db2://localhost:50000/SAMPLE"
+    username: "db2inst1"
+    password: "password"
+    driver-class-name: "com.ibm.db2.jcc.DB2Driver"
+
+logging:
+  level:
+    org.springframework.batch: INFO
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.example.batch.domain
