@@ -49,9 +49,4 @@ IntelliJ에서 `Db2SpringBatchSampleApplication` 실행
 
 ---
 
-## 4) 다음 확장(원하면 바로 추가 가능)
-- 파라미터(runDate) 기반으로 “전날/당일/특정일” 처리
-- 실패/재시작 정책(중단 지점부터 재개)
-- PartitionStep(더 높은 스케일아웃)
-- 소스/타겟 DB를 서로 다른 DB2 인스턴스로 분리
-- 배치 모니터링: Micrometer/Prometheus + Grafana
+
